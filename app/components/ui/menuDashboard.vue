@@ -1,15 +1,34 @@
 <script setup>
-import Button from '../ui/RedButton.vue'
 </script>
 
 <template>
-    <section class="d-inline-flex w-100 align-items-center">
+    <section class="dashboard-menu">
         
-        <h2>Meus cards</h2>
+        <h2>Meus Cards</h2>
 
-        <Button class="btn ms-auto">
-            <NuxtLink  class="nav-link text-white" to="/form"> + Novo card </NuxtLink>
-        </Button>
+        <NuxtLink class="dashboard-menu-link" to="/form">+ Criar Novo Card</NuxtLink>
 
     </section>
 </template>
+
+<style scoped>
+.dashboard-menu {
+    display: flex;
+    width: 100%;
+    align-items: center;
+}
+
+.dashboard-menu-link {
+    margin-left: auto;
+    padding: 0.5rem 1rem;
+    border-radius: var(--b-radius);
+    background: var(--fuchsia-red);
+    color: var(--white);
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.dashboard-menu-link:hover {
+    background: #f7234a;
+}
+</style>

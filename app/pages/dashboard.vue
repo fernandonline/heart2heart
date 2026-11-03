@@ -1,6 +1,4 @@
 <script setup>
-import Button from '~/components/ui/Button.vue'
-
 const { loggedIn } = useUserSession()
 if (!loggedIn.value) {
   navigateTo('/')
@@ -56,68 +54,64 @@ onMounted(() => {
 
 <template>
   <UiBackgroundGrid>
-    <div class="container p-4">
-      <div v-if="carregando" class="text-center">
+    <div class="dashboard-container">
+      <UiMenuDashboard class="dashboard-menu" />
+
+      <div v-if="carregando" class="dashboard-status">
         Carregando...
       </div>
 
-      <div v-else-if="erro" class="alert alert-danger">
+      <div v-else-if="erro" class="dashboard-status dashboard-status--error">
         {{ erro }}
       </div>
 
-      <div v-else-if="cards.length === 0" class="alert alert-info">
-        <UiMenuDashboard class="mb-4" />
+      <div v-else-if="cards.length === 0" class="dashboard-status dashboard-status--info">
         Você ainda não criou nenhum card!
       </div>
 
       <div v-else>
-        <UiMenuDashboard class="mb-4" />
 
         <div class="card-container">
-          <div v-for="card in cards" :key="card.id" class="mb-3">
-            <div class="card">
-              <img :src="card.imageUrl" class="card-img-top" :alt="`Imagem do card: ${card.title}`">
+          <div v-for="card in cards" :key="card.id">
+            <article class="dashboard-card">
+              <img :src="card.imageUrl" class="dashboard-card-image" :alt="`Imagem do card: ${card.title}`">
 
-              <div class="card-body bg-light">
-                <h5 class="card-title">{{ card.title }}</h5>
-                <p class="card-text">{{ card.message }}</p>
-                <!--adicionar mais tarde: <small class="text-muted">Data: {{ card.date}}</small> -->
+              <div class="dashboard-card-content">
+                <h2 class="dashboard-card-title">{{ card.title }}</h2>
+                <p class="dashboard-card-message">{{ card.message }}</p>
 
-
-                <div class="w-100 d-flex gap-2">
-                  <Button style="border-color:var(--ruby-red);" class="w-100">
-                    <a class="ruby-red" :href="card.url" target="_blank">Ver card </a>
-                  </Button>
-
-                  <Button style="border-color:var(--ruby-red);" class="w-100">
-                    <a class="ruby-red" :href="card.url" target="_blank">QR code </a>
-                  </Button>
-
-
-                  <div class="dropdown w-25 d-flex justify-content-center">
-                    <Button style="border-color:var(--ruby-red);">
-                      <span class="drop-btn d-flex" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown"
-                        aria-expanded="false">
-
+                <div class="dashboard-card-actions">
+                  <a class="dashboard-card-link" :href="card.url" target="_blank" rel="noopener noreferrer">
+                    Ver card
+                  </a>
+                  <a class="dashboard-card-link" :href="card.url" target="_blank" rel="noopener noreferrer">
+                    QR code
+                  </a>
+                  <details class="dashboard-card-menu">
+                    <summary class="dashboard-card-menu-toggle" aria-label="Mais opções">
+                      <span class="dashboard-card-dots" aria-hidden="true">
                         <span class="dot"></span>
                         <span class="dot"></span>
                         <span class="dot"></span>
-
                       </span>
-
-                      <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                        <a class="dropdown-item" @click="copiarLink(card.url)"> Copiar link</a>
-                        <a class="dropdown-item" @click="deleteCard(card.id, card.title)"
-                          :disabled="deleting === card.id">
-                          Remover
-                        </a>
-                      </ul>
-                    </Button>
-                  </div>
+                    </summary>
+                    <div class="dashboard-card-menu-items">
+                      <button type="button" class="dashboard-card-menu-item" @click="copiarLink(card.url)">
+                        Copiar link
+                      </button>
+                      <button
+                        type="button"
+                        class="dashboard-card-menu-item"
+                        :disabled="deleting === card.id"
+                        @click="deleteCard(card.id, card.title)"
+                      >
+                        Remover
+                      </button>
+                    </div>
+                  </details>
                 </div>
-
               </div>
-            </div>
+            </article>
           </div>
         </div>
       </div>
@@ -126,60 +120,179 @@ onMounted(() => {
 </template>
 
 <style scoped>
+.dashboard-container {
+  width: min(100% - 2rem, 1200px);
+  margin: 0 auto;
+  padding: 2rem 0;
+}
+
+.dashboard-menu {
+  margin-bottom: 1.5rem;
+}
+
+.dashboard-status {
+  padding: 1rem 1.25rem;
+  border-radius: 0.75rem;
+  text-align: center;
+  background: #f1f3f5;
+  color: #343a40;
+}
+
+.dashboard-status--error {
+  background: #f8d7da;
+  color: #842029;
+}
+
+.dashboard-status--info {
+  background: #cff4fc;
+  color: #055160;
+}
+
 .card-container {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 1rem;
 }
 
-.card {
-  border-radius: var(--radius-card);
-  border: none;
+.dashboard-card {
+  height: 100%;
+  border-radius: 0.75rem;
   overflow: hidden;
-  background-color: transparent;
-  min-height: 340px;
+  box-shadow: 0 0.5rem 1.25rem rgba(0, 0, 0, 0.12);
 }
 
-.card-img-top {
-  aspect-ratio: 18/9;
+.dashboard-card-image {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  height: 180px;
   object-fit: cover;
   object-position: top;
 }
 
-.card-text {
+.dashboard-card-content {
+  display: flex;
+  min-height: 190px;
+  flex-direction: column;
+  padding: 1rem;
+  background: #f8f9fa;
+}
+
+.dashboard-card-title {
+  margin-bottom: 0.5rem;
+  color: #212529;
+  font-size: 1.15rem;
+}
+
+.dashboard-card-message {
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
+  margin-bottom: 1rem;
+  color: #495057;
+  line-height: 1.5;
 }
 
-.drop-btn {
-  cursor: pointer;
+.dashboard-card-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: auto;
+}
 
+.dashboard-card-link,
+.dashboard-card-menu-toggle {
+  display: inline-flex;
+  min-height: 2.5rem;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--ruby-red);
+  border-radius: 0.5rem;
+  background: white;
+  color: var(--ruby-red);
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.dashboard-card-link {
+  flex: 1;
+  padding: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.dashboard-card-link:hover,
+.dashboard-card-menu-toggle:hover {
+  background: var(--ruby-red);
+  color: white;
+}
+
+.dashboard-card-menu {
+  position: relative;
+}
+
+.dashboard-card-menu-toggle {
+  width: 2.5rem;
+  list-style: none;
+}
+
+.dashboard-card-menu-toggle::-webkit-details-marker {
+  display: none;
+}
+
+.dashboard-card-dots {
+  display: flex;
+  align-items: center;
 }
 
 .dot {
   width: 3px;
   height: 3px;
-  background-color: var(--ruby-red);
-  border-radius: 50%;
   margin: 0 2px;
+  border-radius: 50%;
+  background: currentColor;
 }
 
-.dropdown-item {
+.dashboard-card-menu-items {
+  position: absolute;
+  z-index: 1;
+  right: 0;
+  bottom: calc(100% + 0.4rem);
+  min-width: 9rem;
+  padding: 0.35rem;
+  border: 1px solid #dee2e6;
+  border-radius: 0.5rem;
+  background: white;
+  box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.15);
+}
+
+.dashboard-card-menu-item {
+  display: block;
+  width: 100%;
+  padding: 0.55rem 0.65rem;
+  border: 0;
+  border-radius: 0.3rem;
+  background: transparent;
+  color: #212529;
+  text-align: left;
   cursor: pointer;
 }
 
-.dropdown-item:hover {
-  background: rgba(0, 0, 0, 0.2);
+.dashboard-card-menu-item:hover:not(:disabled) {
+  background: #f1f3f5;
 }
 
-@media only screen and (min-width: 998px) {
+.dashboard-card-menu-item:disabled {
+  cursor: wait;
+  opacity: 0.6;
+}
+
+@media (min-width: 998px) {
   .card-container {
     grid-template-columns: repeat(3, 1fr);
   }
 
-  .card-text {
+  .dashboard-card-message {
     -webkit-line-clamp: 3;
   }
 }

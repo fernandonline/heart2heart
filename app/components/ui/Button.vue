@@ -1,16 +1,17 @@
 <template>
-    <button class="btn overflow-hidden">
+    <button class="base-button">
         <slot></slot>
     </button>
 </template>
 
 <style scoped>
-.btn {
+.base-button {
   cursor: pointer;
   color: white;
+  overflow: hidden;
 }
 
-.btn:hover {
+.base-button:hover {
     background: white;
     color: black;
 }

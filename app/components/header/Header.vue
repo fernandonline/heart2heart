@@ -23,6 +23,7 @@
             :src="user.urlPic"
             :alt="`Foto de perfil de ${user.name}`"
             width="35"
+            height="35"
             style="border-radius:50%;"
           />
           <Button class="header-button" @click="userLogout">Sair</Button>

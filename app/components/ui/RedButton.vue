@@ -1,5 +1,5 @@
 <template>
-    <button class="btn btn-romantic position-relative overflow-hidden">
+    <button class="btn-romantic">
         <slot></slot>
     </button>
 </template>

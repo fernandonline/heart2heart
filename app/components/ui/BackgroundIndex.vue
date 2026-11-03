@@ -1,5 +1,5 @@
 <template>
-    <section class="background-index min-vh-100 w-100 d-flex align-items-center p-4 position-relative overflow-hidden">
+    <section class="background-index">
         <slot />
 
         <div class="decorative-circle circle-1"></div>
@@ -12,6 +12,12 @@
 <style scoped>
 .background-index {
   position: relative;
+  display: flex;
+  width: 100%;
+  min-height: 100vh;
+  align-items: center;
+  padding: 1.5rem;
+  overflow: hidden;
 }
 
 .decorative-circle {

@@ -9,20 +9,25 @@
 
   .grid-background {
     position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
+    inset: 0;
     background-image: linear-gradient(to right, #FFFFFF08, transparent 1px),
       linear-gradient(to bottom, #FFFFFF08, transparent 1px);
     background-size: 20px 30px;
+    pointer-events: none;
+  }
+
+  .grid-content {
+    position: relative;
+    z-index: 1;
+    min-height: 100vh;
   }
 </style>
 
 <template>
   <div class="grid-wrapper">
-    <div class="grid-background">
-        <slot/>
+    <div class="grid-background" aria-hidden="true"></div>
+    <div class="grid-content">
+      <slot/>
     </div>
   </div>
 </template>

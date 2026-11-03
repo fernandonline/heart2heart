@@ -121,7 +121,7 @@ async function processarTudo() {
 </script>
 
 <template>
-  <div class="container">
+  <div class="form-container">
     <!-- ============ PROGRESSO ============ -->
     <div class="progress-bar">
       <div 
@@ -164,3 +164,11 @@ async function processarTudo() {
     </div>
   </div>
 </template>
+
+<style scoped>
+.form-container {
+  width: min(calc(100% - 2rem), 760px);
+  margin: 0 auto;
+  padding: 2rem 0;
+}
+</style>
