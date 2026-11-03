@@ -1,109 +1,57 @@
-# Heart2Heart (em desenvolvimento)
+# Heart2Heart
 
-Plataforma para expressar seu carinho através de cartões digitais compartilháveis via QR Code.
+Projeto pessoal em desenvolvimento para criar cartões digitais com imagem e mensagem, compartilhados por link. O criador entra com Google; o destinatário não precisa de conta.
 
-## Sobre o projeto
+## Stack
 
-Permite que pessoas criem mensagens personalizadas com:
-- Upload de imagem
-- Mensagem personalizada
-- Link único compartilhável
-- QR Code para compartilhamento físico
+Nuxt 4, Vue 3, TypeScript, MongoDB/Mongoose, OAuth Google e Cloudinary.
 
-Quem cria precisa fazer login. Quem recebe acessa diretamente pelo link, sem cadastro.
+## Requisitos
 
-## Tecnologias
+- Node.js 22.21.x, 24.11+ ou 26+
+- MongoDB
+- Credenciais OAuth do Google
+- Conta Cloudinary
 
-- **Frontend:** Nuxt 4, Vue 3
-- **Backend:** Nuxt Server Routes, Mongoose
-- **Banco de dados:** MongoDB
-- **Autenticação:** OAuth Google
-- **Upload de imagens:** Cloudinary
+## Executar localmente
 
-## Pré-requisitos
+1. Clone o repositório e entre na pasta:
 
-- Node.js 18+
-- MongoDB Atlas
-- Credenciais OAuth do Google Cloud
-- Conta no Cloudinary
+   ```sh
+   git clone https://github.com/fernandonline/heart2heart.git
+   cd heart2heart
+   ```
 
-## Como rodar localmente
+2. Instale as dependências:
 
-### 1. Clone o repositório
-```bash
-git clone https://github.com/seu-usuario/heart2heart.git
-cd heart2heart
-```
+   ```sh
+   npm install
+   ```
 
-### 2. Instale as dependências
-```bash
-npm install
-```
+3. Crie `.env` na raiz:
 
-### 3. Configure as variáveis de ambiente
+   ```env
+   MONGODB_URI=
+   NUXT_OAUTH_GOOGLE_CLIENT_ID=
+   NUXT_OAUTH_GOOGLE_CLIENT_SECRET=
+   CLOUDINARY_CLOUD_NAME=
+   CLOUDINARY_UPLOAD_PRESET=
+   NUXT_PUBLIC_SITE_URL=http://localhost:3000
+   ```
 
-Crie um arquivo `.env` na raiz do projeto:
-```env
-MONGODB_URI=sua_string_de_conexao_mongodb
-NUXT_OAUTH_GOOGLE_CLIENT_ID=seu_client_id
-NUXT_OAUTH_GOOGLE_CLIENT_SECRET=seu_client_secret
-CLOUDINARY_CLOUD_NAME=seu_cloud_name
-CLOUDINARY_UPLOAD_PRESET=seu_preset
-NUXT_PUBLIC_SITE_URL=http://localhost:3000
-```
+4. Configure `http://localhost:3000/auth/google` como URI de callback do OAuth Google.
+5. Inicie o Nuxt:
 
-Em produção, defina `NUXT_PUBLIC_SITE_URL` como a URL HTTPS pública do site.
+   ```sh
+   npm run dev
+   ```
 
-### 4. Configure o OAuth do Google
+Abra `http://localhost:3000`. Para validar o build, execute `npm run build`.
 
-- Acesse o [Google Cloud Console](https://console.cloud.google.com)
-- Crie um projeto
-- Ative a Google+ API
-- Crie credenciais OAuth 2.0
-- Adicione `http://localhost:3000/auth/google` como URI de redirecionamento
+Nunca coloque credenciais privadas ou valores reais de `.env` no Git. Em produção, configure `NUXT_PUBLIC_SITE_URL` com a URL HTTPS pública do site.
 
-### 5. Rode o projeto
-```bash
-npm run dev
-```
+## Documentação
 
-Acesse em `http://localhost:3000`
-
-## Estrutura do projeto
-```
-heart2heart/
-├── server/
-│   ├── api/
-│   │   ├── cards/
-│   │   │   ├── create.post.ts       # Criar card
-│   │   │   ├── meus.get.ts          # Listar meus cards
-│   │   │   └── [publicId].get.ts    # Ver card público
-│   │   └── auth/
-│   │       └── logout.post.ts       # Logout
-│   ├── models/
-│   │   ├── User.ts                  # Model do usuário
-│   │   └── Card.ts                  # Model do card
-│   ├── routes/
-│   │   └── auth/
-│   │       └── google.get.ts        # OAuth Google
-│   ├── utils/
-│   │   ├── mongoose.ts              # Conexão MongoDB
-│   │   └── generatePublicId.ts      # Gera ID único
-│   └── types/
-│       └── session.d.ts             # Tipos da sessão
-├── pages/
-│   ├── index.vue                    # Página inicial
-│   ├── form.vue                     # Criar card (3 etapas)
-│   ├── dashboard.vue                # Listar meus cards
-│   └── card/
-│       └── [id].vue                 # Visualizar card público
-├── components/
-│   ├── formImage.vue                # Etapa 1: Upload
-│   ├── formDados.vue                # Etapa 2: Dados
-│   └── formMessage.vue              # Etapa 3: Mensagem
-└── nuxt.config.ts
-```
-
-## Keys
-
-https://gist.github.com/fernandonline
+- [Arquitetura](docs/architecture.md)
+- [Convenções](docs/conventions.md)
+- [Decisões de arquitetura (ADRs)](docs/decisions/)
