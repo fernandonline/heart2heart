@@ -49,7 +49,10 @@ NUXT_OAUTH_GOOGLE_CLIENT_ID=seu_client_id
 NUXT_OAUTH_GOOGLE_CLIENT_SECRET=seu_client_secret
 CLOUDINARY_CLOUD_NAME=seu_cloud_name
 CLOUDINARY_UPLOAD_PRESET=seu_preset
+NUXT_PUBLIC_SITE_URL=http://localhost:3000
 ```
+
+Em produção, defina `NUXT_PUBLIC_SITE_URL` como a URL HTTPS pública do site.
 
 ### 4. Configure o OAuth do Google
 

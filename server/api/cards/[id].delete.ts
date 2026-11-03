@@ -11,6 +11,13 @@ export default defineEventHandler(async (event) => {
             message: 'ID não fornecido'
         })
     }
+
+    if (!/^[\da-f]{24}$/i.test(cardId)) {
+        throw createError({
+            statusCode: 400,
+            message: 'ID do card inválido'
+        })
+    }
   
     await connectDB()
   

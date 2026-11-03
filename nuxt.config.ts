@@ -11,6 +11,7 @@ export default defineNuxtConfig({
       }
     },
     public: {
+      siteUrl: process.env.NUXT_PUBLIC_SITE_URL || (process.env.NODE_ENV === 'development' ? 'http://localhost:3000' : ''),
       cloudnaryName: process.env.CLOUDINARY_CLOUD_NAME,
       uploadPreset: process.env.CLOUDINARY_UPLOAD_PRESET,
     }

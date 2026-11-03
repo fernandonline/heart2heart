@@ -1,9 +1,12 @@
 import { connectDB } from '@/../server/utils/mongoose';
 import { User } from '@/../server/models/user';
 import { Card } from '@/../server/models/card';
+import { getPublicCardUrl, getPublicSiteOrigin } from '@/../server/utils/getPublicCardUrl';
 
 export default defineEventHandler(async (event) => {
   const { user } = await requireUserSession(event)
+  const config = useRuntimeConfig(event)
+  const siteOrigin = getPublicSiteOrigin(config.public.siteUrl)
   
   await connectDB()
   
@@ -25,6 +28,6 @@ export default defineEventHandler(async (event) => {
     message: card.message,
     title: card.title,
     date: card.date,
-    url: `${getRequestURL(event).origin}/card/${card.publicId}`
+    url: getPublicCardUrl(siteOrigin, card.publicId)
   }))
 })

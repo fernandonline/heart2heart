@@ -1,7 +1,3 @@
-export const generatePublicId = (length: number = 12): string => {
-  let id = ''
-  while (id.length < length) {
-    id += Math.random().toString(36).substring(2)
-  }
-  return id.substring(0, length)
-}
+import { randomBytes } from 'node:crypto'
+
+export const generatePublicId = (): string => randomBytes(9).toString('base64url')
