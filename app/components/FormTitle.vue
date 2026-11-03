@@ -4,7 +4,10 @@ const emit = defineEmits<{
 }>()
 
 const props = defineProps<{
-  dadosIniciais?: any
+  dadosIniciais?: {
+    title?: string
+    date?: string
+  }
 }>()
 
 const title = ref(props.dadosIniciais?.title || '')
@@ -29,21 +32,23 @@ function enviar() {
         v-model="title" 
         type="text"
         placeholder="ex: João e Maria"
+        required
       />
     </div>
 
     <div class="form-group">
-      <label for="date">Data</label>
+      <label for="date">Data *</label>
       <input 
         id="date"
         v-model="date" 
         type="date"
+        required
       />
     </div>
 
     <button 
       @click="enviar" 
-      :disabled="!title || !date"
+      :disabled="!title.trim() || !date"
       class="btn-proximo"
     >
       Próximo →

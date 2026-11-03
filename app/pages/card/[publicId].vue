@@ -40,7 +40,12 @@ onMounted(async () => {
         </div>
         
         <div v-else class="card">
-          <img v-if="card.imageUrl" :src="card.imageUrl" class="card-img-top">
+          <img
+            v-if="card.imageUrl"
+            :src="card.imageUrl"
+            class="card-img-top"
+            :alt="`Imagem do card: ${card.title}`"
+          >
           <div class="card-body">
             <h1 class="card-title">{{ card.title }}</h1>
             <p class="card-text lead">{{ card.message }}</p> 

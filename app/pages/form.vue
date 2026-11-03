@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import FormImage from '@/components/FormImage.vue'
+import FormImage from '@/components/formImage.vue'
 import FormTitle from '@/components/FormTitle.vue'
-import FormMessage from '@/components/FormMessage.vue'
+import FormMessage from '@/components/formMessage.vue'
 
 const { loggedIn } = useUserSession()
 if (!loggedIn.value) {
@@ -13,8 +13,20 @@ const etapaAtual = ref(0)
 const etapas = [FormImage, FormTitle, FormMessage]
 const titulosEtapas = ['Escolha a imagem', 'Dados do card', 'Sua mensagem']
 
-const dadosCompletos = ref({
-    imageFile: null as File | null,
+interface DadosDoCard {
+    imageFile: File | null
+    title: string
+    date: string
+    message: string
+}
+
+type DadosDaEtapa =
+    | { imageFile: File }
+    | { title: string; date: string }
+    | { message: string }
+
+const dadosCompletos = ref<DadosDoCard>({
+    imageFile: null,
     title: '',
     date: '',
     message: ''
@@ -23,7 +35,7 @@ const dadosCompletos = ref({
 const processando = ref(false)
 const erro = ref('')
 
-function irParaProximaEtapa(dadosDaEtapa: any) {
+function irParaProximaEtapa(dadosDaEtapa: DadosDaEtapa) {
     // Salva os dados dessa etapa
     Object.assign(dadosCompletos.value, dadosDaEtapa)
     
@@ -80,7 +92,12 @@ async function processarTudo() {
     erro.value = ''
 
     try {
-        const imageUrl = await uploadImage(dadosCompletos.value.imageFile!)
+        const imageFile = dadosCompletos.value.imageFile
+        if (!imageFile) {
+            throw new Error('Selecione uma imagem para continuar.')
+        }
+
+        const imageUrl = await uploadImage(imageFile)
         await $fetch('/api/cards/create', {
             method: 'POST',
             body: {
@@ -92,9 +109,9 @@ async function processarTudo() {
         })
         alert('Card criado com sucesso!')
         navigateTo('/dashboard')
-    } catch (error: any) {
+    } catch (error: unknown) {
         console.error('Erro:', error)
-        erro.value = error.message || 'Erro ao criar card'
+        erro.value = error instanceof Error ? error.message : 'Erro ao criar card'
         alert(erro.value)
         etapaAtual.value = 0 
     } finally {

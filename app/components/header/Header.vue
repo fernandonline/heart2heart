@@ -2,10 +2,10 @@
   <header class="navbar">
     <div class="container-fluid">
 
-      <div @click="indexPage" class="navbar-brand">
-        <img src="@/../public/h2h-logo.svg" alt="Logo" width="48" height="35"/>
+      <NuxtLink to="/" class="navbar-brand">
+        <img src="@/../public/h2h-logo.svg" alt="" width="48" height="35"/>
         <span> Heart2Heart </span>
-      </div>
+      </NuxtLink>
 
       <div class="navbar-nav">
         <NuxtLink class="nav-link" v-if="loggedIn" to="/dashboard">Dashboard</NuxtLink>
@@ -18,7 +18,13 @@
 
         <div v-if="loggedIn" class="header-user-info">
           <span>Olá {{ user.name }}</span>
-          <img :src="user?.urlPic" width="35" style="border-radius:50%;" />
+          <img
+            v-if="user?.urlPic"
+            :src="user.urlPic"
+            :alt="`Foto de perfil de ${user.name}`"
+            width="35"
+            style="border-radius:50%;"
+          />
           <Button class="header-button" @click="userLogout">Sair</Button>
         </div>
       </div>
@@ -47,6 +53,8 @@
   font-size: calc(1.275rem + 0.3vw);
   font-weight: bold;
   gap: .5em;
+  color: inherit;
+  text-decoration: none;
 }
 
 .navbar-nav {
@@ -93,7 +101,4 @@ function loginWithGoogle() {
   window.location.href = '/auth/google'
 }
 
-function indexPage() {
-  window.location.href = '/'
-}
 </script>

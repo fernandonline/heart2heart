@@ -4,7 +4,9 @@ const emit = defineEmits<{
 }>()
 
 const props = defineProps<{
-  dadosIniciais?: any
+  dadosIniciais?: {
+    message?: string
+  }
 }>()
 
 const message = ref(props.dadosIniciais?.message || '')

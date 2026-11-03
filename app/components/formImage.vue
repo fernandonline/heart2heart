@@ -4,7 +4,9 @@ const emit = defineEmits<{
 }>()
 
 const props = defineProps<{
-  dadosIniciais?: any
+  dadosIniciais?: {
+    imageFile?: File | null
+  }
 }>()
 
 const imageFile = ref<File | null>(props.dadosIniciais?.imageFile || null)
@@ -15,11 +17,26 @@ function handleFileSelect(e: Event) {
     const file = target.files?.[0]
     
     if (file) {
+        if (previewUrl.value) {
+            URL.revokeObjectURL(previewUrl.value)
+        }
         imageFile.value = file
         previewUrl.value = URL.createObjectURL(file)  
         console.log('Arquivo selecionado:', file.name)
     }
 }
+
+onMounted(() => {
+    if (imageFile.value) {
+        previewUrl.value = URL.createObjectURL(imageFile.value)
+    }
+})
+
+onBeforeUnmount(() => {
+    if (previewUrl.value) {
+        URL.revokeObjectURL(previewUrl.value)
+    }
+})
 
 function enviar() {
     if (imageFile.value) {
@@ -40,7 +57,7 @@ function enviar() {
     />
 
     <div v-if="previewUrl" class="preview">
-      <img :src="previewUrl" alt="Preview" />
+      <img :src="previewUrl" alt="Pré-visualização da imagem selecionada" />
       <p>Imagem selecionada: {{ imageFile?.name }}</p>
     </div>
 
